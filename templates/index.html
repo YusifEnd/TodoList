@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Todo App Home Page</title>
+</head>
+<body>
+    <div style="margin-top:150px; width:900px" class="container">
+        <h3 align="center">Todo List</h3>
+        <hr>
+        {{ form }}
+        <form action="/addTodo/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="formGroupExampleInput">Todo Title</label>
+                <input type="text" name="title" maxlength="29" class="form-control" id="formGroupExampleInput" placeholder="add your todo title" required>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput">Content</label>
+                <textarea class="form-control" name="content" id="formGroupExampleInput2" rows="4" cols="50"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput">Due Date</label>
+                <input type="date" name="due_date" class="form-control" id="formGroupExampleInput3" placeholder="" required>
+            </div>
+            <button type="submit" class="btn btn-success">Add</button>
+        </form>
+        <hr>
+
+        {% if todos %}
+        <table class="table" style="margin-bottom:200px">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Created Date</th>
+                    <th scope="col">Due Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for todo in todos %}
+                    <tr>
+                        <th scope="row"><a href="/detail/{{ todo.id }}">{{ forloop.counter }}</a></th>
+                        <td><a href="/detail/{{ todo.id }}">{{ todo.title }}</a></td>
+                        <td>{{ todo.created_date | date }}</td>
+                        <td>{{ todo.due_date | date }}</td>
+                        {% if todo.completed %}
+                            <td>completed</td>
+                        {% else %}
+                            <td>not completed</td>
+                        {% endif %}
+                        <td><a href="/update/{{ todo.id }}" class="btn btn-info">Complete</a></td>
+                        <td><a href="/delete/{{ todo.id }}" class="btn btn-danger">Delete</a></td>
+
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+        {% else %}
+            <div class="alert alert-danger">
+                Your haven't todos ...
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
